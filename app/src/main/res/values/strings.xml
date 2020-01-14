@@ -1,0 +1,57 @@
+<resources>
+    <string name="app_name">SensorTemplate</string>
+
+
+    <!--MAIN - image description-->
+
+    <string name="main_button_to_service" translatable="false">Main button to service</string>
+    <string name="main_settings" translatable="false">Setting of the app</string>
+    <string name="main_stats" translatable="false">Statistics tab</string>
+    <string name="main_about" translatable="false">More about contributors</string>
+    <string name="main_location_permission">Location permission granted</string>
+
+    <!--MAIN-->
+
+    <string name="main_detection_off">Off</string>
+    <string name="main_status_title">Status:</string>
+    <string name="main_attribute">Test Version</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="white_list">Please add app to whitelist</string>
+
+    <!--SERVICE-->
+    <string name="notification_header">Service running</string>
+    <string name="notification_stop_service">Stop service</string>
+    <string name="notification_body">Press stop to end service</string>
+
+    <!--OPTIONS-->
+    <string name="title_activity_options">Options</string>
+    <string name="options_background_permission">Background permission</string>
+    <string name="options_use_wakelock">Wakelock</string>
+    <string name="options_use_wakelock_summary">CPU will not fall in sleep</string>
+    <string name="options_background_summary">Check, if app is added to whitelist on your device</string>
+    <string name="options_background">Background processing</string>
+
+
+    <!-- ABOUT -->
+    <string name="about_title">Thanks to:</string>
+    <string name="about_autostarter_title">AutoStarter</string>
+    <string name="about_autostarter_text">MIT License  Copyright © 2018 Jude Fernandes\n\n   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:  \n\n The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.  \n\n THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</string>
+    <string name="about_tensorflow_title">Tensorflow</string>
+    <string name="about_tensorflow_text">   Copyright 2019 The TensorFlow Authors\n\n
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at\n\n
+
+       http://www.apache.org/licenses/LICENSE-2.0\n\n
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.</string>
+
+
+
+</resources>

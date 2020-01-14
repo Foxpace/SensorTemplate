@@ -1,0 +1,138 @@
+package com.motionapps.sensortemplate.model.components
+
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.net.wifi.WifiManager
+import android.os.Build
+import android.os.PowerManager
+
+
+class BatteryOptimizer {
+
+    private var wakelock: PowerManager.WakeLock? = null
+
+    /**
+     * @param context
+     * @param time - time after which partial wakelock will be released - in ms
+     */
+    fun setWakeLockTime(context: Context, time: Long){
+        wakelock = (context.getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+            newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Template:WakeLock").apply {
+                acquire(time)
+            }
+        }
+    }
+
+    /**
+     * @param context
+     * wakelock is locked till the app/system will release him
+     */
+
+    @SuppressLint("WakelockTimeout")
+    fun setWakeLockInf(context: Context){
+        wakelock = (context.getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+            newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Template:WakeLock").apply {
+                acquire()
+            }
+        }
+    }
+
+    fun turnOffWakeLock() {
+        if(wakelock != null){
+            if(wakelock!!.isHeld){
+                wakelock!!.release()
+            }else{
+                wakelock = null
+            }
+        }
+    }
+
+    /**
+     * @param context
+     * @return - integer 2 - WIFI, 1 - MOBILE, 0 - NO CONNECTION
+     * method is adapted for android 4.4.4. - Android 10
+     */
+    @Suppress("DEPRECATION")
+    fun getConnectionType(context: Context): Int {
+
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.P ) {
+            cm?.run {
+                cm.getNetworkCapabilities(cm.activeNetwork)?.run {
+                    if (hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                        return 2
+                    } else if (hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                        return 1
+                    }
+                }
+            }
+        } else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+
+            val capabilities = cm?.getNetworkCapabilities(cm.activeNetwork)
+
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    return 1
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    return 2
+                }
+            }
+
+        }else if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+            val activeNetwork = cm!!.activeNetworkInfo
+            if (activeNetwork != null) { // connected to the internet
+                if (activeNetwork.type == ConnectivityManager.TYPE_WIFI) {
+                    return 2
+                } else if (activeNetwork.type == ConnectivityManager.TYPE_MOBILE) {
+                    return 1
+                }
+            }
+        }
+        return 0
+    }
+
+    companion object{
+        // constanst for connection type
+        const val NO_CONNECTION = 0
+        const val MOBILE = 1
+        const val WIFI = 2
+
+        fun getNetworkString(int: Int): String{
+            return when(int){
+                NO_CONNECTION -> "NO CONNECTION"
+                MOBILE -> "MOBILE"
+                WIFI -> "WIFI"
+                else -> "UNKNOWN"
+            }
+        }
+
+        /**
+         * functions to register other system intents
+         */
+        fun registerBatteryChangeState(intentFilter: IntentFilter) {
+            intentFilter.addAction(Intent.ACTION_BATTERY_OKAY)
+            intentFilter.addAction(Intent.ACTION_BATTERY_LOW)
+        }
+
+        fun registerNetworkChange(intentFilter: IntentFilter){
+            intentFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION)
+        }
+
+        fun registerScreenChange(intentFilter: IntentFilter) {
+            intentFilter.addAction(Intent.ACTION_SCREEN_OFF)
+            intentFilter.addAction(Intent.ACTION_SCREEN_ON)
+        }
+
+        fun registerChargingChange(intentFilter: IntentFilter) {
+            intentFilter.addAction(Intent.ACTION_POWER_CONNECTED)
+            intentFilter.addAction(Intent.ACTION_POWER_DISCONNECTED)
+        }
+    }
+
+
+}
+
