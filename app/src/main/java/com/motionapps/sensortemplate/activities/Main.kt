@@ -22,8 +22,7 @@ import com.motionapps.sensortemplate.R
 import com.motionapps.sensortemplate.service.DetectionService
 
 
-class Main : AppCompatActivity(),
-    DetectionService.OnServiceChange, View.OnClickListener {
+class Main : AppCompatActivity(), DetectionService.OnServiceChange, View.OnClickListener {
 
 
     private val TAG: String = "Main_Activity"

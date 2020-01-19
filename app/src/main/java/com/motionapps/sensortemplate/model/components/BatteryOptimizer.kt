@@ -54,11 +54,27 @@ class BatteryOptimizer {
         }
     }
 
-    /**
-     * @param context
-     * @return - integer 2 - WIFI, 1 - MOBILE, 0 - NO CONNECTION
-     * method is adapted for android 4.4.4. - Android 10
-     */
+    companion object{
+        // constanst for connection type
+        const val NO_CONNECTION = 0
+        const val MOBILE = 1
+        const val WIFI = 2
+
+        fun getNetworkString(int: Int): String{
+            return when(int){
+                NO_CONNECTION -> "NO CONNECTION"
+                MOBILE -> "MOBILE"
+                WIFI -> "WIFI"
+                else -> "UNKNOWN"
+            }
+        }
+
+     /**
+      * @param context
+      * @return - integer 2 - WIFI, 1 - MOBILE, 0 - NO CONNECTION
+      * method is adapted for android 4.4.4. - Android 10
+      */
+
     fun getConnectionType(context: Context): Int {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -82,21 +98,6 @@ class BatteryOptimizer {
         }
         return NO_CONNECTION
     }
-
-    companion object{
-        // constanst for connection type
-        const val NO_CONNECTION = 0
-        const val MOBILE = 1
-        const val WIFI = 2
-
-        fun getNetworkString(int: Int): String{
-            return when(int){
-                NO_CONNECTION -> "NO CONNECTION"
-                MOBILE -> "MOBILE"
-                WIFI -> "WIFI"
-                else -> "UNKNOWN"
-            }
-        }
 
         /**
          * functions to register other system intents
