@@ -22,7 +22,9 @@ import com.motionapps.sensortemplate.R
 import com.motionapps.sensortemplate.service.DetectionService
 
 
-class Main : AppCompatActivity(), DetectionService.OnServiceChange, View.OnClickListener {
+class Main : AppCompatActivity(),
+    DetectionService.OnServiceChange, View.OnClickListener {
+
 
     private val TAG: String = "Main_Activity"
     private var mBound: Boolean = false // activity binded to service
@@ -68,6 +70,9 @@ class Main : AppCompatActivity(), DetectionService.OnServiceChange, View.OnClick
         findViewById<ImageButton>(R.id.main_button_options).setOnClickListener(this)
 
         Permissions.getLocationPermission(this@Main)
+
+
+
     }
 
     override fun onStart() {

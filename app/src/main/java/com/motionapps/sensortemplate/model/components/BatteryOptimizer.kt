@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.motionapps.sensortemplate.model.components
 
 import android.annotation.SuppressLint
@@ -6,6 +8,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.net.NetworkInfo
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.PowerManager
@@ -56,43 +59,28 @@ class BatteryOptimizer {
      * @return - integer 2 - WIFI, 1 - MOBILE, 0 - NO CONNECTION
      * method is adapted for android 4.4.4. - Android 10
      */
-    @Suppress("DEPRECATION")
     fun getConnectionType(context: Context): Int {
-
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.P ) {
-            cm?.run {
-                cm.getNetworkCapabilities(cm.activeNetwork)?.run {
-                    if (hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                        return 2
-                    } else if (hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                        return 1
-                    }
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val nc: NetworkCapabilities? = cm.getNetworkCapabilities(cm.activeNetwork)
+            if (nc != null) {
+                if (nc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    return MOBILE
+                } else if (nc.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    return WIFI
                 }
             }
-        } else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-
-            val capabilities = cm?.getNetworkCapabilities(cm.activeNetwork)
-
-            if (capabilities != null) {
-                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                    return 1
-                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                    return 2
-                }
-            }
-
-        }else if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
-            val activeNetwork = cm!!.activeNetworkInfo
+        } else {
+            val activeNetwork: NetworkInfo? = cm.activeNetworkInfo
             if (activeNetwork != null) { // connected to the internet
                 if (activeNetwork.type == ConnectivityManager.TYPE_WIFI) {
-                    return 2
+                    return WIFI
                 } else if (activeNetwork.type == ConnectivityManager.TYPE_MOBILE) {
-                    return 1
+                    return MOBILE
                 }
             }
         }
-        return 0
+        return NO_CONNECTION
     }
 
     companion object{
