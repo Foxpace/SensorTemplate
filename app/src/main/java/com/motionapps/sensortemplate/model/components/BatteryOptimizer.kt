@@ -81,9 +81,9 @@ class BatteryOptimizer {
             val nc: NetworkCapabilities? = cm.getNetworkCapabilities(cm.activeNetwork)
             if (nc != null) {
                 if (nc.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                    return MOBILE
-                } else if (nc.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                     return WIFI
+                } else if (nc.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    return MOBILE
                 }
             }
         } else {
