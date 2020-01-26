@@ -1,4 +1,4 @@
-package com.motionapps.sensortemplate.model.classifiers.TensorflowLite
+package com.motionapps.sensortemplate.model.classifiers.tensorflow
 
 import android.content.Context
 import android.os.SystemClock
