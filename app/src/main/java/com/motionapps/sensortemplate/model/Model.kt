@@ -55,7 +55,7 @@ class Model(private val detectionService: DetectionService): OnLocationChangedCa
         sensorHandler.registerSignificantMotion(this@Model)
 
         // connection to internet
-        Log.i(TAG, "Connection %d".format(battery.getConnectionType(detectionService)))
+        Log.i(TAG, "Connection %d".format(BatteryOptimizer.getConnectionType(detectionService)))
 
     }
 
@@ -126,7 +126,7 @@ class Model(private val detectionService: DetectionService): OnLocationChangedCa
      * get type of network, when is changed
      */
     fun onNetworkChange(){
-        val type = battery.getConnectionType(detectionService)
+        val type = BatteryOptimizer.getConnectionType(detectionService)
         Log.i(TAG, "Actual network type is %s".format(BatteryOptimizer.getNetworkString(type)))
     }
 

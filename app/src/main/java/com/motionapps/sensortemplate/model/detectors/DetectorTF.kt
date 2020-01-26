@@ -5,7 +5,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorManager
 import android.widget.Toast
-import com.motionapps.sensortemplate.model.classifiers.TensorflowLiteClassifier
+import com.motionapps.sensortemplate.model.classifiers.TensorflowLite.TensorflowLiteClassifier
 import com.motionapps.sensortemplate.model.components.SensorHandler
 import com.motionapps.sensortemplate.model.storage.DataStorage
 import com.motionapps.sensortemplate.model.types.SensorOutputBasic

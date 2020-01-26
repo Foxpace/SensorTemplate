@@ -1,4 +1,4 @@
-package com.motionapps.sensortemplate.model.classifiers
+package com.motionapps.sensortemplate.model.classifiers.TensorflowLite
 
 import android.content.Context
 import android.os.SystemClock
@@ -114,7 +114,10 @@ class TensorflowLiteClassifier(context: Context) {
         @Throws(IOException::class)
         fun create(context: Context): TensorflowLiteClassifier? {
             if (fallClassifierLite == null) { // existing NN is returned
-                fallClassifierLite = TensorflowLiteClassifier(context)
+                fallClassifierLite =
+                    TensorflowLiteClassifier(
+                        context
+                    )
             }
             return fallClassifierLite
         }
