@@ -22,7 +22,7 @@ The model under foreground service connects different aspects of Android system 
 
 Every aspect is completely modifiable.
 
-## Detectors
+## Classifiers
 
 * [Tensorflow lite](https://www.tensorflow.org/) neural network for 1D signal/features. Model can be also modified to 2D if needed.
 
