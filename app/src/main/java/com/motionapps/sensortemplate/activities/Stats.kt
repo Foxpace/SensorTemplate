@@ -3,16 +3,16 @@ package com.motionapps.sensortemplate.activities
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import androidx.preference.PreferenceManager
 import android.util.SparseArray
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import com.motionapps.sensortemplate.R
-import java.lang.Exception
 import java.util.*
+
 
 class Stats : AppCompatActivity() {
 
@@ -29,6 +29,10 @@ class Stats : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stats)
+
+        supportActionBar?.setHomeButtonEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        setTitle(R.string.stats_title)
 
         handler!!.postDelayed(object : Runnable {
             override fun run() {
@@ -90,6 +94,13 @@ class Stats : AppCompatActivity() {
 
         return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds)
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        startActivity(Intent(this, Main::class.java))
+        finish()
+        return true
+    }
+
 
     override fun onBackPressed() {
         startActivity(Intent(this, Main::class.java))

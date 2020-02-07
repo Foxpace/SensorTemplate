@@ -38,6 +38,6 @@ class Options : AppCompatActivity() {
     companion object{
     // keys for preferences
         const val STARTER = "preference_background"
-        const val WAKE_LOCK = "preference_wakelock"
+        const val FIRST_START = "preference_first_start"
     }
 }

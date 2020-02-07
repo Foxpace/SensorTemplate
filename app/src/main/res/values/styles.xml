@@ -3,4 +3,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
 
+    <style name="AppThemeActionBar" parent="Theme.AppCompat.Light">
+    </style>
+
 </resources>

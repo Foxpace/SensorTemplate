@@ -7,9 +7,9 @@ import android.content.IntentFilter
 import android.net.wifi.WifiManager
 import com.google.android.gms.location.ActivityRecognitionResult
 import com.google.android.gms.location.ActivityTransitionResult
-import com.motionapps.sensortemplate.model.components.ActivityDetectionManager
-import com.motionapps.sensortemplate.model.components.BatteryOptimizer
-import com.motionapps.sensortemplate.model.Model
+import com.motionapps.sensormodel.components.ActivityDetectionManager
+import com.motionapps.sensormodel.components.BatteryOptimizer
+import com.motionapps.sensormodel.Model
 
 class DetectionBroadcastReceiver(private val service: DetectionService,
                                  private val model: Model

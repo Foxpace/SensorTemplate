@@ -7,8 +7,8 @@ import android.os.Binder
 import android.os.IBinder
 import com.motionapps.sensortemplate.activities.components.Notify
 import com.motionapps.sensortemplate.activities.Stats
-import com.motionapps.sensortemplate.model.Model
 import com.motionapps.sensortemplate.R
+import com.motionapps.sensormodel.Model
 
 
 class DetectionService : Service() {
@@ -21,7 +21,7 @@ class DetectionService : Service() {
     private var receiverRegistered: Boolean = false
     private lateinit var receiver: DetectionBroadcastReceiver
 
-    private var model: Model ?= null // main processing unit for analysis
+    private var model: Model?= null // main processing unit for analysis
 
 
     override fun onBind(p0: Intent?): IBinder? {
@@ -87,8 +87,8 @@ class DetectionService : Service() {
     fun onStopIntent(){
         if (onServiceChange != null){
             onServiceChange!!.onChange(false)
-            Notify.cancelNotification(this@DetectionService, serviceId)
         }
+        stopForeground(true)
         stopSelf()
     }
 

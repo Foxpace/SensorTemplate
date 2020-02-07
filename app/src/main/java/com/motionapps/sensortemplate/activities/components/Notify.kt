@@ -33,9 +33,7 @@ class Notify {
          * method can be modified for any kind of notification
          */
         fun createForegroundNotification(@NonNull context: Context, title: String, text: String = ""): Notification{
-            createChannel(
-                context
-            )
+            createChannel(context)
 
             val cancel = Intent(DetectionService.STOP_SERVICE)
             val cancelService = PendingIntent.getBroadcast(
@@ -66,6 +64,7 @@ class Notify {
                 .addAction(R.drawable.ic_cancel, context.getString(R.string.notification_stop_service),
                     cancelService)
 
+
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mBuilder.color = ContextCompat.getColor(context, R.color.white)
             }
@@ -93,7 +92,7 @@ class Notify {
 
         private var channelNotification: NotificationChannel ?= null
 
-        private var CHANNEL_ID: String = "9874"
+        private var CHANNEL_ID: String = "motionsapps_channel"
         private var CHANNEL_NAME: String = "DetectionNotifications"
 
         /**
@@ -110,10 +109,8 @@ class Notify {
                     CHANNEL_NAME, importance)
                 channelNotification!!.description = description
 
-                val manager: NotificationManagerCompat ?=
-                    context.getSystemService(NotificationManagerCompat::class.java)
-
-                manager?.createNotificationChannel(channelNotification!!)
+                val manager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                manager.createNotificationChannel(channelNotification!!)
 
             }
         }

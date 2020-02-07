@@ -1,9 +1,6 @@
 package com.motionapps.sensortemplate.activities
 
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -16,16 +13,17 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.preference.PreferenceManager
 import com.motionapps.sensortemplate.activities.about.About
 import com.motionapps.sensortemplate.activities.components.Permissions
 import com.motionapps.sensortemplate.R
+import com.motionapps.sensortemplate.activities.welcome.Welcome
 import com.motionapps.sensortemplate.service.DetectionService
 
 
 class Main : AppCompatActivity(), DetectionService.OnServiceChange, View.OnClickListener {
 
 
-    private val TAG: String = "Main_Activity"
     private var mBound: Boolean = false // activity binded to service
     private var bAnimation: Boolean = false  // animation in progress
     private lateinit var detectionService: DetectionService // main service to connect
@@ -52,6 +50,12 @@ class Main : AppCompatActivity(), DetectionService.OnServiceChange, View.OnClick
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+        if(!preferences.getBoolean(Options.FIRST_START, false)){
+            finish()
+            startActivity(Intent(this, Welcome::class.java))
+        }
+
         findViewById<ImageButton>(R.id.main_button_monitoring).setOnLongClickListener {
 
             if(mBound){
@@ -69,9 +73,6 @@ class Main : AppCompatActivity(), DetectionService.OnServiceChange, View.OnClick
         findViewById<ImageButton>(R.id.main_button_options).setOnClickListener(this)
 
         Permissions.getLocationPermission(this@Main)
-
-
-
     }
 
     override fun onStart() {
@@ -209,6 +210,10 @@ class Main : AppCompatActivity(), DetectionService.OnServiceChange, View.OnClick
         })
 
         findViewById<ImageButton>(R.id.main_button_monitoring).startAnimation(outAnimation)
+    }
+
+    companion object {
+        private const val TAG: String = "Main_Activity"
     }
 
 }

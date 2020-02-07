@@ -1,8 +1,16 @@
 <resources>
     <string name="app_name">SensorTemplate</string>
 
+    <!--WELCOME-->
+    <string name="next">Next</string>
+    <string name="Welcome">Welcome</string>
+    <string name="permissions_needed">All permissions are required</string>
+    <string name="allow">Allow</string>
+    <string name="allowed_permission">Allowed permission</string>
+    <string name="permission_title">These permissions are required for full functionality:</string>
+    <string name="permission_gps_text">Location permission</string>
 
-    <!--MAIN - image description-->
+    <!--image descriptions-->
 
     <string name="main_button_to_service" translatable="false">Main button to service</string>
     <string name="main_settings" translatable="false">Setting of the app</string>
@@ -19,6 +27,9 @@
     <string name="off">Off</string>
     <string name="white_list">Please add app to whitelist</string>
 
+    <!--STATS-->
+    <string name="stats_title">Stats</string>
+
     <!--SERVICE-->
     <string name="notification_header">Service running</string>
     <string name="notification_stop_service">Stop service</string>
@@ -34,7 +45,8 @@
 
 
     <!-- ABOUT -->
-    <string name="about_title">Thanks to:</string>
+    <string name="about_title">Third parties</string>
+    <string name="about_title_thanks">Thanks to:</string>
     <string name="about_autostarter_title">AutoStarter</string>
     <string name="about_autostarter_text">MIT License  Copyright © 2018 Jude Fernandes\n\n   Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:  \n\n The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.  \n\n THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</string>
     <string name="about_tensorflow_title">Tensorflow</string>
@@ -51,7 +63,30 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.</string>
+    <string name="about_sklearn_porter_title">Sklearn-porter</string>
+    <string name="about_sklearn_porter_text">
+        Copyright 2016-2019, Darius Morawiec\n\n
 
+    Permission is hereby granted, free of charge, to any person obtaining
+    a copy of this software and associated documentation files (the
+    "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to
+    permit persons to whom the Software is furnished to do so, subject to
+    the following conditions:\n\n
+
+    The above copyright notice and this permission notice shall be
+    included in all copies or substantial portions of the Software.\n\n
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+    NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+    LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+    OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+    </string>
 
 
 </resources>

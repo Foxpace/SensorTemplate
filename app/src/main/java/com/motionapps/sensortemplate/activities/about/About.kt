@@ -1,17 +1,22 @@
 package com.motionapps.sensortemplate.activities.about
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
 import com.motionapps.sensortemplate.R
+import com.motionapps.sensortemplate.activities.Main
 
 class About : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about)
+        setTitle(R.string.about_title)
+        supportActionBar?.setHomeButtonEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val linearLayout = findViewById<LinearLayout>(R.id.about_linear)
 
@@ -49,5 +54,11 @@ class About : AppCompatActivity() {
             linearLayout.addView(text)
 
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        startActivity(Intent(this, Main::class.java))
+        finish()
+        return true
     }
 }
