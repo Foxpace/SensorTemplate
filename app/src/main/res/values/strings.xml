@@ -9,6 +9,7 @@
     <string name="allowed_permission">Allowed permission</string>
     <string name="permission_title">These permissions are required for full functionality:</string>
     <string name="permission_gps_text">Location permission</string>
+    <string name="permission_activity_text">Activity recognition</string>
 
     <!--image descriptions-->
 
@@ -87,6 +88,7 @@
     WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
     </string>
+
 
 
 </resources>

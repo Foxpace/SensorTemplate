@@ -1,7 +1,6 @@
 package com.motionapps.sensortemplate.activities
 
 import android.content.*
-import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
@@ -11,34 +10,51 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import com.motionapps.sensortemplate.activities.about.About
-import com.motionapps.sensortemplate.activities.components.Permissions
 import com.motionapps.sensortemplate.R
 import com.motionapps.sensortemplate.activities.welcome.Welcome
 import com.motionapps.sensortemplate.service.DetectionService
 
 
-class Main : AppCompatActivity(), DetectionService.OnServiceChange, View.OnClickListener {
+class Main : AppCompatActivity(), View.OnClickListener {
 
 
-    private var mBound: Boolean = false // activity binded to service
+    private var mBound: Boolean = false // activity bound to service
     private var bAnimation: Boolean = false  // animation in progress
+    private var bRegistered: Boolean = false // broadcast receiver
     private lateinit var detectionService: DetectionService // main service to connect
 
-    private val connection = object : ServiceConnection {
+
+    private val broadcastReceiver: BroadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            val action = p1?.action
+            if(p1 != null){
+                when(action){
+                    DetectionService.OFF_UI ->{
+                        setOffUI()
+                    }
+
+                    DetectionService.ON_UI ->{
+                        setOnUI()
+                    }
+                }
+            }
+        }
+    }
+
+    private val connection: ServiceConnection = object : ServiceConnection {
 
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
             val binder = service as DetectionService.DetectionServiceBinder
-            detectionService = binder.getService() // get conncected service
-            detectionService.onServiceChange = this@Main // registering callback to service
+            detectionService = binder.getService() // get connected service
             mBound = true
 
             if (detectionService.running) {
                 setOnUI()
             }
+            unbindService(this)
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
@@ -72,32 +88,39 @@ class Main : AppCompatActivity(), DetectionService.OnServiceChange, View.OnClick
         findViewById<ImageButton>(R.id.main_button_stats).setOnClickListener(this)
         findViewById<ImageButton>(R.id.main_button_options).setOnClickListener(this)
 
-        Permissions.getLocationPermission(this@Main)
+        registerBroadcast()
     }
 
     override fun onStart() {
         super.onStart()
-        Intent(this, DetectionService::class.java).also { intent ->
-            bindService(intent, connection, Context.BIND_AUTO_CREATE)
-        } // try to bind to service
-    }
-
-    override fun onStop() {
-        super.onStop()
-        if (mBound){
-            unbindService(connection)
+        if (!mBound) {
+            Intent(this, DetectionService::class.java).also { intent ->
+                bindService(intent, connection, Context.BIND_AUTO_CREATE)
+            } // try to bind to service
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        // location service is only needed for functionality - need to change if there are more permissions
-        if (requestCode == Permissions.LOCATION_ID && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Permissions.getLocationPermission(this@Main)
-            Toast.makeText(this@Main, R.string.main_location_permission, Toast.LENGTH_SHORT).show()
+
+    private fun registerBroadcast(){
+        if(!bRegistered){
+            val intentFilter = IntentFilter(DetectionService.OFF_UI)
+            intentFilter.addAction(DetectionService.ON_UI)
+            registerReceiver(broadcastReceiver, intentFilter)
+            bRegistered = true
         }
     }
 
+    private fun unregisterBroadcast(){
+        if(bRegistered){
+            unregisterReceiver(broadcastReceiver)
+            bRegistered = false
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterBroadcast()
+    }
 
     private fun setOnService(){
         val intentService = Intent(applicationContext, DetectionService::class.java)
@@ -113,17 +136,6 @@ class Main : AppCompatActivity(), DetectionService.OnServiceChange, View.OnClick
 
     private fun setOffService(){
         sendBroadcast(Intent(DetectionService.STOP_SERVICE))
-        unbindService(connection)
-        mBound = false
-    }
-
-
-    override fun onChange(running: Boolean) {
-        if (running){
-            setOnUI()
-        }else{
-            setOffUI()
-        }
     }
 
     // change of activity

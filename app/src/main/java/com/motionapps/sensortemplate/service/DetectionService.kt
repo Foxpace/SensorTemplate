@@ -16,8 +16,6 @@ class DetectionService : Service() {
     var running: Boolean = false // indicates active service
     private var serviceId: Int = 4578
 
-    var onServiceChange: OnServiceChange?= null // callback to main activity
-
     private var receiverRegistered: Boolean = false
     private lateinit var receiver: DetectionBroadcastReceiver
 
@@ -37,9 +35,7 @@ class DetectionService : Service() {
 
         registerBroadcastReceiver()
 
-        if (onServiceChange != null){
-            onServiceChange!!.onChange(true)
-        }
+        sendBroadcast(Intent(ON_UI))
 
         model!!.onStart()
 
@@ -67,7 +63,6 @@ class DetectionService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-
         if(!running){
             return
         }
@@ -82,12 +77,12 @@ class DetectionService : Service() {
                     System.currentTimeMillis() - startTime)
 
         running = false
+
+
     }
 
     fun onStopIntent(){
-        if (onServiceChange != null){
-            onServiceChange!!.onChange(false)
-        }
+        sendBroadcast(Intent(OFF_UI))
         stopForeground(true)
         stopSelf()
     }
@@ -102,22 +97,16 @@ class DetectionService : Service() {
      */
     companion object Actions{
 
-        const val STOP_SERVICE: String = "STOP_DETECTION_SERVICE" // comes from main activity/ notification
-
-        private val INTENTS: Array<String> = arrayOf(STOP_SERVICE)
+        const val STOP_SERVICE: String = "com.motionapps.STOP_DETECTION_SERVICE" // comes from main activity / notification
+        const val OFF_UI: String = "com.motionapps.OFF_UI" // set off UI
+        const val ON_UI: String = "com.motionapps.ON_UI" // set on UI
+        private val INTENTS: Array<String> = arrayOf(STOP_SERVICE, OFF_UI, ON_UI)
 
         fun registerIntents(intentFilter: IntentFilter){
             for(s in INTENTS){
                 intentFilter.addAction(s)
             }
         }
-    }
-
-    /**
-     *  interface for callback to main activity
-     */
-    interface OnServiceChange {
-        fun onChange(running: Boolean)
     }
 
 }

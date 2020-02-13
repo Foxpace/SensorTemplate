@@ -169,8 +169,8 @@ class ActivityDetectionManager(context: Context) {
     companion object{
 
 
-        const val MOVING_STATE_TRANSITION: String = "MOVING_STATE_TRANSITION"
-        const val MOVING_STATE_UPDATES: String = "MOVING_STATE_UPDATES"
+        const val MOVING_STATE_TRANSITION: String = "com.motionapps.MOVING_STATE_TRANSITION"
+        const val MOVING_STATE_UPDATES: String = "com.motionapps.MOVING_STATE_UPDATES"
 
         private val INTENTS: Array<String> = arrayOf(MOVING_STATE_TRANSITION, MOVING_STATE_UPDATES)
 

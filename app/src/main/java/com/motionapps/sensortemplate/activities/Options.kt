@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import com.motionapps.sensortemplate.activities.components.Permissions
+import com.judemanutd.autostarter.AutoStartPermissionHelper
 import com.motionapps.sensortemplate.R
 
 class Options : AppCompatActivity() {
@@ -28,7 +28,10 @@ class Options : AppCompatActivity() {
             // custom click preference
             val preference: Preference = findPreference(STARTER)!!
             preference.setOnPreferenceClickListener {
-                context?.let { it1 -> Permissions.openWhiteList(context = it1) }
+                context?.let {
+                    AutoStartPermissionHelper.getInstance().getAutoStartPermission(
+                    context!!
+                ) }
                 true
             }
         }

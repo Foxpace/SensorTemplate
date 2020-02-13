@@ -2,6 +2,7 @@ package com.motionapps.sensortemplate.activities.welcome.fragments
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 
@@ -50,22 +52,33 @@ class FragmentPermission : Fragment(), CheckFragment {
     ): View? {
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_permission, container, false)
-    }
-
-    override fun onResume() {
-        super.onResume()
+        val view = inflater.inflate(R.layout.fragment_permission, container, false)
         // arrays of basic info for required permissions - creation of views
-        val permissions: Array<String> = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
-        val permissionsID: Array<Int> = arrayOf(GPS_PERMISSION)
-        val permissionsViews: Array<Int> = arrayOf(R.id.permission_gps)
-        val permissionsText: Array<Int> = arrayOf(R.string.permission_gps_text)
+        val linearLayout: LinearLayout = view!!.findViewById(R.id.permission_container)
+
+        val permissions: ArrayList<String> = arrayListOf(Manifest.permission.ACCESS_FINE_LOCATION)
+        val permissionsID: ArrayList<Int> = arrayListOf(GPS_PERMISSION)
+        val permissionsText: ArrayList<Int> = arrayListOf(R.string.permission_gps_text)
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            permissions.add(Manifest.permission.ACTIVITY_RECOGNITION)
+            permissionsID.add(ACTIVITY_RECOGNITION)
+            permissionsText.add(R.string.permission_activity_text)
+        }
 
         for(i in permissions.indices){
-            val v: View = view!!.findViewById<View>(permissionsViews[i])
-            map[permissionsID[i]] = PermissionObject(this, v, permissionsID[i], permissions[i], permissionsText[i])
+            val v = layoutInflater.inflate(R.layout.permission_line, null)
+            if(v != null){
+                linearLayout.addView(v)
+                map[permissionsID[i]] = PermissionObject(this, v,
+                    permissionsID[i], permissions[i], permissionsText[i])
+            }
+
         }
+        return view
     }
+
+
 
 
     companion object {
@@ -73,6 +86,7 @@ class FragmentPermission : Fragment(), CheckFragment {
         fun newInstance() = FragmentPermission()
 
         private const val GPS_PERMISSION = 1589
+        private const val ACTIVITY_RECOGNITION = 1685
     }
 
     /**
@@ -109,6 +123,7 @@ class FragmentPermission : Fragment(), CheckFragment {
 
             val image = view.findViewById<ImageView>(R.id.permission_line_image)
             image.setImageResource(R.drawable.ic_check_black)
+            granted = true
         }
     }
 }
