@@ -48,7 +48,7 @@ Thanks goes to:
   
 ## Got a question ?
 
-For more information visit: [www.creaticemotion.app](https://www.creativemotion.app/)
+For more information visit: [www.creativemotion.app](https://www.creativemotion.app/)
 
 Contact us by: <support@creativemotion.app>
 
