@@ -1,6 +1,6 @@
 # SensorTemplate
 
-The SensorTemplate provides a simple build of the Android application with centrelized tools to manipulate with sensors of a phone. Whole computational unit is build on a foreground service, which can be turn on by the button in the main activity.
+The SensorTemplate provides a simple build of the Android application with centralized tools to manipulate with sensors of a phone. Whole computational unit is build on a foreground service, which can be turn on by the button in the main activity.
 <p align="center">
 <img src="https://creativemotion.app/assets/images/screenshot-2019-09-08-16-39-06-pixel-quite-black-portrait-1048x1050.png"  width="500">
 </p>
@@ -48,7 +48,7 @@ Thanks goes to:
   
 ## Got a question ?
 
-For more information visit: [www.creaticemotion.app](https://www.creativemotion.app/)
+For more information visit: [www.creativemotion.app](https://www.creativemotion.app/)
 
 Contact us by: <support@creativemotion.app>
 
