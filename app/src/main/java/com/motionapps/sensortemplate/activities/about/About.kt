@@ -61,4 +61,9 @@ class About : AppCompatActivity() {
         finish()
         return true
     }
+
+    override fun onBackPressed() {
+        startActivity(Intent(this, Main::class.java))
+        finish()
+    }
 }

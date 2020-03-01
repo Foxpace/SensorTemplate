@@ -155,6 +155,7 @@ class Main : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
+        finish()
     }
 
     private fun setOnUI(){

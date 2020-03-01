@@ -1,5 +1,6 @@
 package com.motionapps.sensortemplate.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.Preference
@@ -37,6 +38,16 @@ class Options : AppCompatActivity() {
         }
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        startActivity(Intent(this, Main::class.java))
+        finish()
+        return true
+    }
+
+    override fun onBackPressed() {
+        startActivity(Intent(this, Main::class.java))
+        finish()
+    }
 
     companion object{
     // keys for preferences
