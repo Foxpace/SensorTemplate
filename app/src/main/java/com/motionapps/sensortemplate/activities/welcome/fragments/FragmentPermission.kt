@@ -41,7 +41,7 @@ class FragmentPermission : Fragment(), CheckFragment {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         val o: PermissionObject = map[requestCode]!!
-        if (ContextCompat.checkSelfPermission(requireActivity(), o.permission) == PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(requireActivity(), o.permission[0]) == PackageManager.PERMISSION_GRANTED){
             o.setPermissionGranted() // permission has been given
         }
     }
@@ -56,12 +56,17 @@ class FragmentPermission : Fragment(), CheckFragment {
         // arrays of basic info for required permissions - creation of views
         val linearLayout: LinearLayout = view!!.findViewById(R.id.permission_container)
 
-        val permissions: ArrayList<String> = arrayListOf(Manifest.permission.ACCESS_FINE_LOCATION)
+        val permissions = ArrayList<Array<String>>()
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            permissions.add(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION))
+        }else{
+            permissions.add(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION))
+        }
         val permissionsID: ArrayList<Int> = arrayListOf(GPS_PERMISSION)
         val permissionsText: ArrayList<Int> = arrayListOf(R.string.permission_gps_text)
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
-            permissions.add(Manifest.permission.ACTIVITY_RECOGNITION)
+            permissions.add(arrayOf(Manifest.permission.ACTIVITY_RECOGNITION))
             permissionsID.add(ACTIVITY_RECOGNITION)
             permissionsText.add(R.string.permission_activity_text)
         }
@@ -95,7 +100,7 @@ class FragmentPermission : Fragment(), CheckFragment {
     internal class PermissionObject(
         private val fragment: FragmentPermission, private val view: View,
         internal val id: Int,
-        internal val permission: String,
+        internal val permission: Array<String>,
         permissionsText: Int
     ){
 
@@ -105,13 +110,13 @@ class FragmentPermission : Fragment(), CheckFragment {
             val textView = view.findViewById<TextView>(R.id.permission_line_text)
             textView.setText(permissionsText)
             //
-            if (ContextCompat.checkSelfPermission(fragment.requireActivity(), permission) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(fragment.requireActivity(), permission[0]) == PackageManager.PERMISSION_GRANTED) {
                 granted = true
                 setPermissionGranted()
             } else {
                 val b = view.findViewById<Button>(R.id.permission_line_button)
                 b.setOnClickListener {
-                    fragment.requestPermissions(arrayOf(permission), id)
+                    fragment.requestPermissions(permission, id)
                 }
             }
         }
