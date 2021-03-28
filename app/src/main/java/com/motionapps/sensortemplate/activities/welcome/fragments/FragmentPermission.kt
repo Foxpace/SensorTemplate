@@ -41,7 +41,7 @@ class FragmentPermission : Fragment(), CheckFragment {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         val o: PermissionObject = map[requestCode]!!
-        if (ContextCompat.checkSelfPermission(activity!!, o.permission) == PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(requireActivity(), o.permission) == PackageManager.PERMISSION_GRANTED){
             o.setPermissionGranted() // permission has been given
         }
     }
@@ -49,7 +49,7 @@ class FragmentPermission : Fragment(), CheckFragment {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_permission, container, false)
@@ -105,7 +105,7 @@ class FragmentPermission : Fragment(), CheckFragment {
             val textView = view.findViewById<TextView>(R.id.permission_line_text)
             textView.setText(permissionsText)
             //
-            if (ContextCompat.checkSelfPermission(fragment.activity!!, permission) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(fragment.requireActivity(), permission) == PackageManager.PERMISSION_GRANTED) {
                 granted = true
                 setPermissionGranted()
             } else {

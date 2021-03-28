@@ -14,7 +14,7 @@ class ActivityDetectionManager(context: Context) {
     private val activityRecognitionClient: ActivityRecognitionClient = ActivityRecognition.getClient(context)
 
     private var pendingIntentTransition: PendingIntent? = null
-    private var pendingIntentUpdates: PendingIntent? = null
+    private var pendingIntentUpdates: PendingIntent ? = null
 
     /**
      * @param activities - ints of activities from ActivityRecognitionClient
@@ -75,12 +75,14 @@ class ActivityDetectionManager(context: Context) {
         negativeCallBack: OnFailureListener)
     {
         pendingIntentTransition = getPendingIntentTransition(context)
+        pendingIntentTransition?.let {
+            activityRecognitionClient.requestActivityTransitionUpdates(
+                ActivityTransitionRequest(getTransitions(activities)),
+                it
+            ).addOnSuccessListener(positiveCallBack)
+                .addOnFailureListener(negativeCallBack)
+        }
 
-        activityRecognitionClient.requestActivityTransitionUpdates(
-            ActivityTransitionRequest(getTransitions(activities)),
-            pendingIntentTransition
-        ).addOnSuccessListener(positiveCallBack)
-            .addOnFailureListener(negativeCallBack)
     }
 
     /**
@@ -92,18 +94,20 @@ class ActivityDetectionManager(context: Context) {
     fun registerTransitions(context: Context, activities: IntArray) {
 
         pendingIntentTransition = getPendingIntentTransition(context)
-
-        activityRecognitionClient.requestActivityTransitionUpdates(ActivityTransitionRequest(
-            getTransitions(activities)),
-            pendingIntentTransition
-        ).addOnSuccessListener {
-            OnSuccessListener<Void> {
-                Log.i(TAG, "successfully registered activity transitions")
+        pendingIntentTransition?.let {
+            activityRecognitionClient.requestActivityTransitionUpdates(ActivityTransitionRequest(
+                getTransitions(activities)),
+                it
+            ).addOnSuccessListener {
+                OnSuccessListener<Void> {
+                    Log.i(TAG, "successfully registered activity transitions")
+                }
+            }.addOnFailureListener {
+                pendingIntentTransition = null
+                Log.w(TAG, "Registration of activity transitions failed")
             }
-        }.addOnFailureListener {
-            pendingIntentTransition = null
-            Log.w(TAG, "Registration of activity transitions failed")
         }
+
     }
 
     /**
@@ -121,10 +125,12 @@ class ActivityDetectionManager(context: Context) {
         negativeCallBack: OnFailureListener)
     {
         pendingIntentUpdates = getPendingIntentUpdates(context)
-
-        activityRecognitionClient.requestActivityUpdates(timeToUpdate, pendingIntentUpdates).
+        pendingIntentUpdates?.let {
+            activityRecognitionClient.requestActivityUpdates(timeToUpdate, it).
             addOnSuccessListener(positiveCallBack)
-            .addOnFailureListener(negativeCallBack)
+                .addOnFailureListener(negativeCallBack)
+        }
+
     }
 
     /**
@@ -138,7 +144,7 @@ class ActivityDetectionManager(context: Context) {
 
         pendingIntentUpdates = getPendingIntentUpdates(context)
 
-        activityRecognitionClient.requestActivityUpdates(timeToUpdate, pendingIntentUpdates).
+        activityRecognitionClient.requestActivityUpdates(timeToUpdate, pendingIntentUpdates!!).
             addOnSuccessListener {
             OnSuccessListener<Void> {
                 Log.i(TAG, "successfully registered activity updates")
@@ -153,16 +159,16 @@ class ActivityDetectionManager(context: Context) {
      * removes all updates from Activity recognition client
      */
     fun onDestroy() {
-        if (pendingIntentTransition != null) {
-            activityRecognitionClient.removeActivityTransitionUpdates(pendingIntentTransition)
-            pendingIntentTransition = null
+        pendingIntentTransition?.let {
+            activityRecognitionClient.removeActivityTransitionUpdates(it)
         }
 
-        if (pendingIntentUpdates != null) {
-            activityRecognitionClient.removeActivityUpdates(pendingIntentUpdates)
-            pendingIntentUpdates = null
+        pendingIntentUpdates?.let {
+            activityRecognitionClient.removeActivityUpdates(it)
         }
 
+        pendingIntentTransition = null
+        pendingIntentUpdates = null
         Log.i(TAG, "unregistering")
     }
 

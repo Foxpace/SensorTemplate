@@ -14,16 +14,16 @@ import java.nio.MappedByteBuffer
 import java.nio.channels.FileChannel
 import kotlin.collections.ArrayList
 
-
-class TensorflowLiteClassifier(context: Context) {
-    private var tflite: Interpreter?
-    private val inputData: ByteBuffer
-    private val labelProbArray: Array<FloatArray>
+// there is simpler and newer approach to implement Tensorflow lite
+class TensorflowLiteClassifier : TfInterface {
+    private lateinit var tflite: Interpreter
+    private lateinit var inputData: ByteBuffer
+    private lateinit var labelProbArray: Array<FloatArray>
     private val labels: ArrayList<String> = ArrayList()
 
 
     /** initialization of neural network - NN */
-    init {
+    override fun initModel(context: Context) {
         val options = Interpreter.Options()
         tflite = Interpreter(loadModelFile(context), options) // main interpreter of NN
         inputData = ByteBuffer.allocateDirect(4 * FEATURES_SIZE) // input buffer with floats
@@ -33,30 +33,12 @@ class TensorflowLiteClassifier(context: Context) {
         Log.d(TAG, "Created a Tensorflow Lite  Classifier.")
     }
 
-    private fun readLabels(context: Context){
-
-        val br: BufferedReader?
-        br = BufferedReader(InputStreamReader(context.assets.open(LABEL_PATH))) // reads labels from txt file - strings to show
-        var line: String?
-        while (br.readLine().also { line = it } != null) {
-            labels.add(line!!)
-        }
-        br.close()
-    }
-
     /**
      * @param features - number of features - placeholder has 5 inputs
      * @return - there are 2 outputs from 2 neurons, but only one is needed to return, the other one is 1 - returned value
      */
-    fun classifyEvent(features: ArrayList<Double>?): Float {
-        if (features == null) {
-            return -1.0f
-        }
+    override fun predict(features: ArrayList<Double>): Float {
 
-        if (tflite == null) {
-            Log.e(TAG, "Classifier has not been initialized; Skipped.")
-            return -1.0f
-        }
         if (features.size != FEATURES_SIZE) {
             Log.e(TAG, "Wrong size of features; Skipped.")
             return -1.0f
@@ -67,7 +49,7 @@ class TensorflowLiteClassifier(context: Context) {
 
         // NN calculation
         val startTime = SystemClock.uptimeMillis()
-        tflite!!.run(inputData, labelProbArray)
+        tflite.run(inputData, labelProbArray)
         val endTime = SystemClock.uptimeMillis()
 
         Log.d(TAG, "Timecost to run model inference: " + (endTime - startTime))
@@ -75,11 +57,23 @@ class TensorflowLiteClassifier(context: Context) {
         return labelProbArray[0][0] // picked first value
     }
 
-    private fun close() {
-        if (tflite != null) {
-            tflite!!.close()
-            tflite = null
+    override fun closeModel() {
+        tflite.close()
+    }
+
+    /**
+     * Reads labels from txt file if available
+     *
+     * @param context - Context
+     */
+    private fun readLabels(context: Context){
+        val br: BufferedReader?
+        br = BufferedReader(InputStreamReader(context.assets.open(LABEL_PATH))) // reads labels from txt file - strings to show
+        var line: String?
+        while (br.readLine().also { line = it } != null) {
+            labels.add(line!!)
         }
+        br.close()
     }
 
     /**
@@ -109,28 +103,23 @@ class TensorflowLiteClassifier(context: Context) {
         private const val LABEL_PATH = "tensorflow/labels.txt"
         private const val FEATURES_SIZE = 5
 
-        private var fallClassifierLite: TensorflowLiteClassifier? = null
+        private var classifier: TensorflowLiteClassifier? = null
 
         @Throws(IOException::class)
         fun create(context: Context): TensorflowLiteClassifier? {
-            if (fallClassifierLite == null) { // existing NN is returned
-                fallClassifierLite =
-                    TensorflowLiteClassifier(
-                        context
-                    )
+            if (classifier == null) { // existing NN is returned
+                classifier = TensorflowLiteClassifier()
+                classifier?.initModel(context)
             }
-            return fallClassifierLite
+            return classifier
         }
 
         fun destroy() {
-            if (fallClassifierLite != null) {
-                fallClassifierLite!!.close()
-                fallClassifierLite = null
+            if (classifier != null) {
+                classifier!!.closeModel()
+                classifier = null
             }
         }
-
-
     }
-
 
 }

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.util.SparseArray
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -24,7 +25,7 @@ class Stats : AppCompatActivity() {
 
 
     private var textViewSparseArray = SparseArray<TextView>() // stored textviews
-    private var handler: Handler? = Handler() // handler to update values in realtime
+    private var handler: Handler? = Handler(Looper.getMainLooper()) // handler to update values in realtime
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

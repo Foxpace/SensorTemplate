@@ -31,7 +31,7 @@ class Options : AppCompatActivity() {
             preference.setOnPreferenceClickListener {
                 context?.let {
                     AutoStartPermissionHelper.getInstance().getAutoStartPermission(
-                    context!!
+                    requireContext()
                 ) }
                 true
             }

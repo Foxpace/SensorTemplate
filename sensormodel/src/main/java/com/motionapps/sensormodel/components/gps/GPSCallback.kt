@@ -3,6 +3,7 @@ package com.motionapps.sensormodel.components.gps
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
+import android.os.Looper
 import android.util.Log
 import com.google.android.gms.location.*
 
@@ -98,10 +99,7 @@ class GPSCallback constructor(context: Context?, private val callBack: OnLocatio
             return
         }
         Log.i(TAG, "Registering new request")
-        locationClient.requestLocationUpdates(
-            createRequest(),
-            this, null
-        )
+        locationClient.requestLocationUpdates(createRequest(), this, Looper.getMainLooper())
         registered = true
     }
 
@@ -109,13 +107,13 @@ class GPSCallback constructor(context: Context?, private val callBack: OnLocatio
      * @return LocationRequest - new request by template
      */
     private fun createRequest(): LocationRequest {
-        val locationRequest = LocationRequest()
-        locationRequest.priority = gpsParameters!!.priority
-        locationRequest.interval = gpsParameters!!.interval
-        locationRequest.fastestInterval = gpsParameters!!.fastestInterval
-        locationRequest.smallestDisplacement = gpsParameters!!.distance.toFloat()
         Log.i(TAG, "Registering: " + gpsParameters.toString())
-        return locationRequest
+        return LocationRequest.create().apply {
+            priority = gpsParameters!!.priority
+            interval = gpsParameters!!.interval
+            fastestInterval = gpsParameters!!.fastestInterval
+            smallestDisplacement = gpsParameters!!.distance.toFloat()
+        }
     }
 
     companion object {

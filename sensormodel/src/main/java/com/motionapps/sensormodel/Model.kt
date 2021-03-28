@@ -15,7 +15,7 @@ import com.motionapps.sensormodel.components.SensorHandler
 import com.motionapps.sensormodel.components.gps.GPSCallback
 import com.motionapps.sensormodel.components.gps.GPSParameters
 import com.motionapps.sensormodel.detectors.Detector
-import com.motionapps.sensormodel.detectors.DetectorKotlin
+import com.motionapps.sensormodel.detectors.DetectorTF
 
 
 class Model(private val context: Context): GPSCallback.OnLocationChangedCallback, SensorEventListener, TriggerEventListener() {
@@ -27,7 +27,7 @@ class Model(private val context: Context): GPSCallback.OnLocationChangedCallback
     private val gps : GPSCallback = GPSCallback(context, this@Model, true)
     private val battery : BatteryOptimizer = BatteryOptimizer()
     private val preferences : SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    private var detector: Detector = DetectorKotlin(context)
+    private var detector: Detector = DetectorTF(context)
 
     /**
      * onStart - only at the beginning of the process
@@ -114,8 +114,11 @@ class Model(private val context: Context): GPSCallback.OnLocationChangedCallback
     /**
      * called when activity recognition sends intent to provide probabilities of movement states
      */
-    fun onStateUpdate(result: ActivityRecognitionResult){
-        Log.i(TAG, "The most probable activity %d".format(ActivityDetectionManager.convertTransitionToString(result.mostProbableActivity.type)))
+    fun onStateUpdate(result: ActivityRecognitionResult?){
+        result?.let {
+            Log.i(TAG, "The most probable activity %d".format(ActivityDetectionManager.convertTransitionToString(it.mostProbableActivity.type)))
+        }
+
     }
 
     /**

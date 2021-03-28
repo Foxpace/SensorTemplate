@@ -6,6 +6,8 @@ import android.hardware.SensorEvent
 import android.hardware.SensorManager
 import android.widget.Toast
 import com.motionapps.classifiers.tensorflow.TensorflowLiteClassifier
+import com.motionapps.classifiers.tensorflow.TensorflowLiteClassifierNew
+import com.motionapps.classifiers.tensorflow.TfInterface
 import com.motionapps.sensormodel.components.SensorHandler
 import com.motionapps.sensormodel.storage.DataStorage
 import com.motionapps.sensormodel.types.SensorOutputBasic
@@ -22,7 +24,7 @@ class DetectorTF(private val context: Context) : Detector() {
     private var startTime: Long = 0L
 
     // init of tensorflow neural network
-    private val tensorflowLiteClassifier: TensorflowLiteClassifier = TensorflowLiteClassifier.create(context)!!
+    private val tensorflowLiteClassifier: TfInterface = TensorflowLiteClassifierNew.create(context)!!
 
     override val sensors: IntArray = intArrayOf(Sensor.TYPE_ACCELEROMETER)
     override val sampling: IntArray = intArrayOf(SensorManager.SENSOR_DELAY_FASTEST)
@@ -70,8 +72,9 @@ class DetectorTF(private val context: Context) : Detector() {
             analysing = true
             startTime = System.currentTimeMillis()
 
-            val result = tensorflowLiteClassifier.classifyEvent(
-                arrayListOf(0.0, 0.0, 0.0, 0.0, 0.0))
+            val result = tensorflowLiteClassifier.predict(
+                arrayListOf(0.0, 0.0, 0.0, 0.0, 0.0)
+            )
 
             Toast.makeText(context, result.toString(), Toast.LENGTH_SHORT).show()
 
