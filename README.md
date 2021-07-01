@@ -2,7 +2,7 @@
 
 The SensorTemplate provides a simple build of the Android application with centralized tools to manipulate with sensors of a phone. Whole computational unit is build on a foreground service, which can be turn on by the button in the main activity.
 <p align="center">
-<img src="https://creativemotion.app/assets/images/screenshot-2019-09-08-16-39-06-pixel-quite-black-portrait-1048x1050.png"  width="500">
+<img src="SensorTemplate.png"  width="250">
 </p>
 
 [![API](https://img.shields.io/badge/API-19%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=19)
